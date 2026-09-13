@@ -1,13 +1,12 @@
-# .github/workflows/run_pipeline.yml
-name: Nifty 100 Backtest & Optimize
+name: Breakout Strategy Optimization Pipeline
 
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: # Allows manual trigger
+  workflow_dispatch: 
 
 jobs:
-  backtest:
+  run-backtest:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -22,13 +21,16 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Run ML Optimization (30 mins)
+      - name: Download & Cache Market Data
+        run: python data_loader.py
+
+      - name: Run ML Optimization (30 minutes)
         run: python optimize.py
 
-      - name: Generate Final Backtest Results
+      - name: Generate Final Strategy Results
         run: python backtest.py
 
-      - name: Upload Artifacts
+      - name: Upload Backtest Results Artifact
         uses: actions/upload-artifact@v3
         with:
           name: strategy-results
@@ -36,3 +38,4 @@ jobs:
             trades.csv
             stats.txt
             comparison.png
+            config.yaml
