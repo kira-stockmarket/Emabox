@@ -68,7 +68,7 @@ if __name__ == "__main__":
         
         # 1. Train the ML (6 minutes per window to hit a ~30 min total budget)
         study = optuna.create_study(direction="maximize")
-        study.optimize(create_objective(block['train_start'], block['train_end']), timeout=360)
+        study.optimize(create_objective(block['train_start'], block['train_end']), timeout=240)
         
         best_params = load_config()
         # Apply the optimized values discovered for this specific window
