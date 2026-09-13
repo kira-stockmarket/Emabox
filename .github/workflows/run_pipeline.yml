@@ -1,38 +1,33 @@
-name: Breakout Strategy Optimization Pipeline
+name: Walk-Forward Strategy Pipeline
 
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: 
+  workflow_dispatch: # Allows you to manually trigger the workflow from the Actions tab
 
 jobs:
   run-backtest:
     runs-on: ubuntu-latest
     steps:
-      # Updated to v4
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Updated to v5
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+          cache: 'pip' # Speeds up future runs by caching dependencies
 
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
 
-      - name: Download & Cache Market Data
+      - name: Download & Cache Market Data (Max History)
         run: python data_loader.py
 
-      - name: Run ML Optimization (30 minutes)
-        run: python optimize.py
+      - name: Run Walk-Forward ML Optimization (30+ mins)
+        run: python walk_forward.py
 
-      - name: Generate Final Strategy Results
-        run: python backtest.py
-
-      # Updated to v4 (This fixes your error)
       - name: Upload Backtest Results Artifact
         uses: actions/upload-artifact@v4
         with:
