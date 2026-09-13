@@ -1,0 +1,38 @@
+# .github/workflows/run_pipeline.yml
+name: Nifty 100 Backtest & Optimize
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run ML Optimization (30 mins)
+        run: python optimize.py
+
+      - name: Generate Final Backtest Results
+        run: python backtest.py
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: strategy-results
+          path: |
+            trades.csv
+            stats.txt
+            comparison.png
