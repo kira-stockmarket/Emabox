@@ -1,0 +1,16 @@
+# config.yaml
+strategy:
+  max_consolidation_range_pct: 5.0      # Maximum box height (%)
+  max_consolidation_period: 20          # Days
+  stop_position_inside_box: 0.5         # 0.5 = middle of the box
+  max_sl_risk_pct: 2.0                  # Max risk per trade (%)
+  min_close_pct_beyond_box: 1.0         # Breakout confirmation (%)
+  max_wick_length_on_breakout_pct: 0.5  # Max allowable wick (%)
+  min_volume_increase_ratio: 1.5        # 1.5x average volume
+  req_price_beyond_ema20: true          # Price must be > 20 EMA
+  prev_expansion_phase_return_pct: 10.0 # Prior trend requirement (%)
+
+trade_management:
+  ema_stoploss_period: 200
+  target_rr_ratio: 2.0
+  trailing_sl_pct: 5.0
